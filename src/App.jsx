@@ -14,6 +14,7 @@ import PhasedRoadmap from './components/PhasedRoadmap';
 import RouteDemand from './components/RouteDemand';
 import ResourceScaling from './components/ResourceScaling';
 import StrategicCards from './components/StrategicCards';
+import ScoreSimulator from './components/ScoreSimulator';
 import Footer from './components/Footer';
 
 // Five views: 'init' → 'login' → 'landing' → 'upload' → 'loading' → 'dashboard'
@@ -76,6 +77,7 @@ export default function App() {
         <RouteDemand />
         <ResourceScaling />
         <StrategicCards />
+        <ScoreSimulator />
       </main>
       <Footer />
     </>

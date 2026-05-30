@@ -148,8 +148,8 @@ const BUCKETS = [
 ];
 
 const GATES = [
-  { tier: 'Gate 1', label: 'Safety & Regulatory', color: '#d97706', bg: '#fef3c7', items: ['EB-105 ramp geometry', 'ARFF capability (Index A/B)', 'Medevac within 20 miles', 'System resiliency ≥ 95%'] },
-  { tier: 'Gate 2', label: 'Power & Grid Resiliency', color: '#7c3aed', bg: '#f5f3ff', items: ['Microgrid installed (solar + BESS)', 'Grid capacity headroom', 'Thermal management (NFPA 855)'] },
+  { tier: 'Gate 1', label: 'Safety & Regulatory', color: '#6366f1', bg: '#ede9fe', items: ['EB-105 ramp geometry', 'ARFF capability (Index A/B)', 'Medevac within 20 miles', 'System resiliency ≥ 95%'] },
+  { tier: 'Gate 2', label: 'Power & Grid Resiliency', color: '#0ea5e9', bg: '#e0f2fe', items: ['Microgrid installed (solar + BESS)', 'Grid capacity headroom', 'Thermal management (NFPA 855)'] },
 ];
 
 const TRUST_ITEMS = [
@@ -278,12 +278,12 @@ export default function LandingPage({ onEnter }) {
           {/* Scoring flow */}
           <div className="lp-score-flow">
             {[
-              { step: '01', label: 'Gate checks', note: 'Hard blockers — fail either gate and no score is generated', color: '#d97706' },
+              { step: '01', label: 'Gate checks', note: 'Hard blockers — fail either gate and no score is generated', color: '#6366f1' },
               { step: '02', label: 'Base score', note: 'Simulation-derived starting point per bucket', color: '#6366f1' },
               { step: '03', label: 'Penalties', note: 'Deducted for missing infrastructure or complex airspace', color: '#ef4444' },
-              { step: '04', label: 'Bonuses', note: 'Added for strengths, capped at +15 per bucket', color: '#22c55e' },
-              { step: '05', label: 'AHP weight', note: 'Bucket scores multiplied by expert-elicited weights', color: '#0ea5e9' },
-              { step: '06', label: 'Final index', note: 'Sum of weighted buckets, hard-capped at 100', color: '#0d9488' },
+              { step: '04', label: 'Bonuses', note: 'Added for strengths, capped at +15 per bucket', color: '#16a34a' },
+              { step: '05', label: 'AHP weight', note: 'Bucket scores multiplied by expert-elicited weights', color: '#6366f1' },
+              { step: '06', label: 'Final index', note: 'Sum of weighted buckets, hard-capped at 100', color: '#6366f1' },
             ].map((f, i, arr) => (
               <div className="lp-flow-item" key={i}>
                 <div className="lp-flow-dot" style={{ background: f.color }} />
@@ -300,9 +300,9 @@ export default function LandingPage({ onEnter }) {
           <p className="lp-scoring-subdesc">Both gates must pass before any bucket score is generated. A single failure blocks the entire assessment.</p>
           <div className="lp-gates">
             {GATES.map((g, i) => (
-              <div className="lp-gate-card" key={i} style={{ borderColor: g.color }}>
-                <div className="lp-gate-header" style={{ background: g.bg }}>
-                  <span className="lp-gate-tier" style={{ color: g.color }}>{g.tier}</span>
+              <div className="lp-gate-card" key={i} style={{ borderTopColor: g.color, borderTopWidth: 3 }}>
+                <div className="lp-gate-header">
+                  <span className="lp-gate-tier" style={{ color: g.color, background: g.bg }}>{g.tier}</span>
                   <span className="lp-gate-label">{g.label}</span>
                 </div>
                 <ul className="lp-gate-list">
@@ -324,14 +324,12 @@ export default function LandingPage({ onEnter }) {
           <p className="lp-scoring-subdesc">Each bucket is scored independently then multiplied by its AHP weight to produce the final readiness index.</p>
           <div className="lp-buckets">
             {BUCKETS.map((b, i) => (
-              <div className="lp-bucket-card" key={i}>
+              <div className="lp-bucket-card" key={i} style={{ borderTopColor: b.color, borderTopWidth: 3 }}>
                 <div className="lp-bucket-header">
-                  <div>
-                    <div className="lp-bucket-name" style={{ color: b.color }}>{b.name}</div>
-                    <div className="lp-bucket-desc">{b.desc}</div>
-                  </div>
-                  <div className="lp-bucket-weight" style={{ background: b.bg, color: b.color }}>{b.weight}</div>
+                  <div className="lp-bucket-name">{b.name}</div>
+                  <div className="lp-bucket-weight" style={{ color: b.color, background: b.bg }}>{b.weight}</div>
                 </div>
+                <div className="lp-bucket-desc">{b.desc}</div>
 
                 {b.penalties.length > 0 && (
                   <div className="lp-bucket-section">

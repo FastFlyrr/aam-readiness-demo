@@ -6,6 +6,21 @@ The dashboard presents the results of a 90-day Monte Carlo simulation across 9 i
 
 ---
 
+## Access & Authentication
+
+The demo is now protected by login. Everyone should have received an invite email from Supabase with a link to set their own credentials — use that to log in with your personal account.
+
+If you haven't set up your credentials yet or need immediate access, use the shared team account below:
+
+| Field    | Value                  |
+| -------- | ---------------------- |
+| Email    | `admin@fastflyrr.com`  |
+| Password | `admin@123`            |
+
+> Contact [yashasvi.jj@gmail.com](mailto:yashasvi.jj@gmail.com) if you need your individual account set up or reset.
+
+---
+
 ## What's Inside
 
 - **9-Scenario Results Matrix** — click any cell to see why it passed, failed, or was flagged as optimal
@@ -59,17 +74,17 @@ The dashboard presents the results of a 90-day Monte Carlo simulation across 9 i
 
 ## Available Scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start local development server with hot reload |
-| `npm run build` | Build optimised production output to `dist/` |
-| `npm run preview` | Preview the production build locally |
+| Command           | Description                                     |
+| ----------------- | ----------------------------------------------- |
+| `npm run dev`     | Start local development server with hot reload  |
+| `npm run build`   | Build optimised production output to `dist/`    |
+| `npm run preview` | Preview the production build locally            |
 
 ---
 
 ## Project Structure
 
-```
+```text
 aam-readiness-demo/
 ├── index.html
 ├── package.json
