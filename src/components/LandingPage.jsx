@@ -93,6 +93,65 @@ const STEPS = [
   },
 ];
 
+const BUCKETS = [
+  {
+    name: 'Throughput',
+    weight: '41%',
+    color: '#6366f1',
+    bg: '#ede9fe',
+    desc: 'How efficiently aircraft move through the facility. Monte Carlo simulation across 500 runs, 90-day window.',
+    penalties: [
+      { label: 'No weather radar (AWOS only)', pts: '-5' },
+      { label: 'No hardened hangars', pts: '-5' },
+    ],
+    bonuses: [
+      { label: 'High-voltage transmission (>69kV within 0.5mi)', pts: '+6' },
+      { label: 'Icing & de-icing infrastructure', pts: '+6' },
+      { label: 'Severe convective defense', pts: '+5' },
+      { label: 'Thermal resilience (warm/convective climate)', pts: '+4' },
+    ],
+  },
+  {
+    name: 'Airspace',
+    weight: '34%',
+    color: '#0ea5e9',
+    bg: '#e0f2fe',
+    desc: 'Complexity of surrounding airspace. Starts at 100, deducted for ATC friction and peak conflict density.',
+    penalties: [
+      { label: 'Class B airspace', pts: '-30' },
+      { label: 'Class C airspace', pts: '-20' },
+      { label: 'Class D airspace', pts: '-12' },
+    ],
+    bonuses: [
+      { label: 'Class G airspace', pts: '+5' },
+      { label: 'Touch-and-go complexity', pts: '+5' },
+      { label: 'NextGen IFR / WAAS approaches', pts: '+6' },
+      { label: 'VTOL pad proximity', pts: '+3' },
+      { label: 'Aviation electrification on-field', pts: '+5' },
+    ],
+  },
+  {
+    name: 'Demand',
+    weight: '25%',
+    color: '#0d9488',
+    bg: '#ccfbf1',
+    desc: 'Market potential for the route. Gravity model using US Census 30-mile catchment and projected annual passengers.',
+    penalties: [],
+    bonuses: [
+      { label: 'Medevac — Level I trauma centre', pts: '+10' },
+      { label: 'Opportunity zone in catchment', pts: '+10' },
+      { label: 'Middle-mile freight hub within 1mi', pts: '+7' },
+      { label: 'Multimodal heavy rail nearby', pts: '+6' },
+      { label: 'Medevac — Level II trauma centre', pts: '+5' },
+    ],
+  },
+];
+
+const GATES = [
+  { tier: 'Gate 1', label: 'Safety & Regulatory', color: '#d97706', bg: '#fef3c7', items: ['EB-105 ramp geometry', 'ARFF capability (Index A/B)', 'Medevac within 20 miles', 'System resiliency ≥ 95%'] },
+  { tier: 'Gate 2', label: 'Power & Grid Resiliency', color: '#7c3aed', bg: '#f5f3ff', items: ['Microgrid installed (solar + BESS)', 'Grid capacity headroom', 'Thermal management (NFPA 855)'] },
+];
+
 const TRUST_ITEMS = [
   { label: 'FAA EB-105', note: 'Vertiport design standard' },
   { label: 'AC 150/5210-6D', note: 'ARFF regulatory basis' },
@@ -201,6 +260,112 @@ export default function LandingPage({ onEnter }) {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Scoring Engine ───────────────────────────────── */}
+      <section className="lp-scoring" id="scoring">
+        <div className="lp-section-inner">
+          <div className="lp-section-eyebrow">Scoring Engine</div>
+          <h2 className="lp-section-h2">How your readiness score is calculated</h2>
+          <p className="lp-section-sub">
+            Every airport runs through the same transparent, research-backed pipeline —
+            gates first, then simulation-derived base scores, adjusted by penalties and bonuses,
+            capped at +15 bonus per bucket, then combined via AHP-weighted final score.
+          </p>
+
+          {/* Scoring flow */}
+          <div className="lp-score-flow">
+            {[
+              { step: '01', label: 'Gate checks', note: 'Hard blockers — fail either gate and no score is generated', color: '#d97706' },
+              { step: '02', label: 'Base score', note: 'Simulation-derived starting point per bucket', color: '#6366f1' },
+              { step: '03', label: 'Penalties', note: 'Deducted for missing infrastructure or complex airspace', color: '#ef4444' },
+              { step: '04', label: 'Bonuses', note: 'Added for strengths, capped at +15 per bucket', color: '#22c55e' },
+              { step: '05', label: 'AHP weight', note: 'Bucket scores multiplied by expert-elicited weights', color: '#0ea5e9' },
+              { step: '06', label: 'Final index', note: 'Sum of weighted buckets, hard-capped at 100', color: '#0d9488' },
+            ].map((f, i, arr) => (
+              <div className="lp-flow-item" key={i}>
+                <div className="lp-flow-dot" style={{ background: f.color }} />
+                {i < arr.length - 1 && <div className="lp-flow-line" />}
+                <div className="lp-flow-step" style={{ color: f.color }}>{f.step}</div>
+                <div className="lp-flow-label">{f.label}</div>
+                <div className="lp-flow-note">{f.note}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Gate checks */}
+          <h3 className="lp-scoring-subhead">Gate checks — hard blockers</h3>
+          <p className="lp-scoring-subdesc">Both gates must pass before any bucket score is generated. A single failure blocks the entire assessment.</p>
+          <div className="lp-gates">
+            {GATES.map((g, i) => (
+              <div className="lp-gate-card" key={i} style={{ borderColor: g.color }}>
+                <div className="lp-gate-header" style={{ background: g.bg }}>
+                  <span className="lp-gate-tier" style={{ color: g.color }}>{g.tier}</span>
+                  <span className="lp-gate-label">{g.label}</span>
+                </div>
+                <ul className="lp-gate-list">
+                  {g.items.map((item, j) => (
+                    <li key={j}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke={g.color} strokeWidth="2.5" strokeLinecap="round" width="12" height="12" style={{ flexShrink: 0, marginTop: 2 }}>
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Bucket breakdown */}
+          <h3 className="lp-scoring-subhead" style={{ marginTop: 56 }}>The three scoring buckets</h3>
+          <p className="lp-scoring-subdesc">Each bucket is scored independently then multiplied by its AHP weight to produce the final readiness index.</p>
+          <div className="lp-buckets">
+            {BUCKETS.map((b, i) => (
+              <div className="lp-bucket-card" key={i}>
+                <div className="lp-bucket-header">
+                  <div>
+                    <div className="lp-bucket-name" style={{ color: b.color }}>{b.name}</div>
+                    <div className="lp-bucket-desc">{b.desc}</div>
+                  </div>
+                  <div className="lp-bucket-weight" style={{ background: b.bg, color: b.color }}>{b.weight}</div>
+                </div>
+
+                {b.penalties.length > 0 && (
+                  <div className="lp-bucket-section">
+                    <div className="lp-bucket-section-label lp-label-penalty">Penalties</div>
+                    {b.penalties.map((p, j) => (
+                      <div className="lp-adj-row" key={j}>
+                        <span className="lp-adj-label">{p.label}</span>
+                        <span className="lp-adj-pts lp-pts-neg">{p.pts}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="lp-bucket-section">
+                  <div className="lp-bucket-section-label lp-label-bonus">Bonuses (max +15)</div>
+                  {b.bonuses.map((bon, j) => (
+                    <div className="lp-adj-row" key={j}>
+                      <span className="lp-adj-label">{bon.label}</span>
+                      <span className="lp-adj-pts lp-pts-pos">{bon.pts}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="lp-scoring-footer">
+            <span>Bonus ceiling: max <strong>+15 per bucket</strong> before reaching base score</span>
+            <span>·</span>
+            <span>Hard cap: <strong>100</strong> per bucket</span>
+            <span>·</span>
+            <span>AHP consistency ratio: <strong>CR = 0.06</strong> (Oct 2025 expert elicitation)</span>
+            <span>·</span>
+            <span className="lp-scoring-disclaimer">PRELIMINARY — Not a substitute for FAA-approved engineering review</span>
           </div>
         </div>
       </section>

@@ -474,6 +474,180 @@ footer { text-align: center; padding: 32px 48px; font-size: 12px; color: var(--m
   font-size: 13.5px; color: var(--muted); line-height: 1.65;
 }
 
+/* ── Scoring Engine section ───────────────────────────────────── */
+.lp-scoring {
+  padding: 96px 32px;
+  background: #f8fafc;
+}
+
+.lp-score-flow {
+  display: flex;
+  gap: 0;
+  margin-bottom: 64px;
+  overflow-x: auto;
+}
+.lp-flow-item {
+  flex: 1;
+  min-width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 0 8px;
+}
+.lp-flow-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+.lp-flow-line {
+  position: absolute;
+  top: 6px;
+  left: calc(50% + 12px);
+  right: calc(-50% + 12px);
+  height: 2px;
+  background: #e2e8f0;
+}
+.lp-flow-step {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+.lp-flow-label {
+  font-size: 13px; font-weight: 700; color: var(--navy);
+  margin-bottom: 4px;
+}
+.lp-flow-note {
+  font-size: 11px; color: var(--muted); line-height: 1.5;
+}
+
+.lp-scoring-subhead {
+  font-size: 20px; font-weight: 800; color: var(--navy);
+  margin-bottom: 6px;
+}
+.lp-scoring-subdesc {
+  font-size: 14px; color: var(--muted); margin-bottom: 24px;
+}
+
+.lp-gates {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.lp-gate-card {
+  border: 1.5px solid;
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
+}
+.lp-gate-header {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lp-gate-tier {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.lp-gate-label {
+  font-size: 13px; font-weight: 700; color: var(--navy);
+}
+.lp-gate-list {
+  list-style: none;
+  padding: 14px 18px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lp-gate-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.lp-buckets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.lp-bucket-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px;
+}
+.lp-bucket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.lp-bucket-name {
+  font-size: 16px; font-weight: 800; margin-bottom: 4px;
+}
+.lp-bucket-desc {
+  font-size: 12px; color: var(--muted); line-height: 1.5;
+}
+.lp-bucket-weight {
+  font-size: 18px; font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.lp-bucket-section {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+}
+.lp-bucket-section-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.lp-label-penalty { color: #ef4444; }
+.lp-label-bonus   { color: #22c55e; }
+
+.lp-adj-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.lp-adj-label {
+  font-size: 12px; color: #475569; line-height: 1.4;
+}
+.lp-adj-pts {
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+}
+.lp-pts-neg { color: #ef4444; }
+.lp-pts-pos { color: #16a34a; }
+
+.lp-scoring-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 36px;
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.lp-scoring-footer strong { color: var(--navy); }
+.lp-scoring-disclaimer {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
 /* ── Trust bar ────────────────────────────────────────────────── */
 .lp-trust {
   background: white;
